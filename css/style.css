@@ -1,3 +1,36 @@
+body {
+  background: whitesmoke;
+}
+ h1 {
+  text-align: center;
+  
+  color: red;
+  margin-bottom: 40px;
+}
+
+header nav ul {
+  text-align: center;
+  
+  list-style: none;
+}
+nav ul li {
+  color: blue;
+}
+header nav ul li {
+   display: inline-block;
+  padding: 10px;
+}
+header nav ul li a {
+  text-decoration: none;
+  color: coral;
+  font-size: 25px;
+  font-weight: 100;
+}
+header nav ul li a:hover {
+  color: white;
+}
+
+
 #imagesSection {
     max-width: 90%;
     margin: 0 auto;
@@ -6,8 +39,13 @@
   img {
     width: 300px;
     height: 300px;
-    border: 10px solid greenyellow;
+    border: 10px solid aqua;
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
+    
+  }
+
+  #listResults {
+    color: teal;
   }
