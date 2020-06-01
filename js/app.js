@@ -8,10 +8,10 @@ var middleImage = document.querySelector('#centerImage');
 var rigthImage = document.querySelector('#rigthImage');
 var sectionImage = document.querySelector('#imageSection');
 
-/* leftImage.src = `assets/${product[0]}`; */
+
 //var itemArray = [];
 function Items(name) {
-    this.itemName = name;
+    this.itemName = name.split(".")[0];
     this.imagePath = `assets/${name}`;
     this.imageClick = 0;
     this.imageView = 0;
@@ -36,15 +36,25 @@ function renderProducts() {
     middleItem = Items.all[randImages(0, Items.all.length - 1)];
     rigthItem = Items.all[randImages(0, Items.all.length - 1)];
 
+    if (leftItem === middleItem || leftItem === rigthItem || rigthItem === middleItem) {
+        renderProducts();
+
+    }
+
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
     leftImage.title = leftItem.itemName;
+    //leftItem.imageView++;
+
     middleImage.src = middleItem.imagePath;
     middleImage.alt = middleItem.itemName;
     middleImage.title = middleItem.itemName;
+
+    //middleItem.imageView++;
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
+    //rigthItem.imageView++;
 
 }
 renderProducts();
@@ -62,39 +72,46 @@ function mouseClick(event) {
 
             if (event.target.id === 'leftImage') {
                 leftItem.imageClick++;
-                Items.all.imageView++;
-                
+
+
             }
             if (event.target.id === 'centerImage') {
                 middleItem.imageClick++;
-                Items.all.imageView++;
+
             }
             if (event.target.id === 'rigthImage') {
                 rigthItem.imageClick++;
-                Items.all.imageView++;
+
             }
+            leftItem.imageView++;
+            middleItem.imageView++;
+            rigthItem.imageView++;
+
+
+
             renderProducts();
         }
     }
-     else  {
+    else if (totalClick == 25) {
+        totalClick++;
         renderResult();
 
-    } 
-    
+    }
+
 }
 
 
 
-
+// To add results
 function renderResult() {
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Items.all.length; i++) {
         var li1 = document.createElement('li');
 
-        li1.textContent = `${Items.all[i].itemName} has ${Items.all[i].imageClick} click`;
+        li1.textContent = `${Items.all[i].itemName} has ${Items.all[i].imageClick} clicks and ${Items.all[i].imageView} views`;
         ul1.append(li1);
     }
-    
+
 
 }
 
@@ -103,12 +120,12 @@ function renderResult() {
 
 
 
-//random function
-  function randImages(min, max) {
+//random images function
+function randImages(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-} 
- 
+}
 
 
-  
+
+
 
