@@ -51,7 +51,7 @@ function renderProducts() {
          /* if(UniqueImages === leftItem || UniqueImages === middleItem || UniqueImages === rigthItem){
             renderProducts();}
          } */
-
+        }
         
      
             
