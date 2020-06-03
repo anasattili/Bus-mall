@@ -160,7 +160,7 @@ function mouseClick(event) {
 
 // To add results
 function renderResult() {
-    setProduct();
+    
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
@@ -235,25 +235,10 @@ function addChartJs() {
 
 }
 
-function setProduct() {
-    var productData = JSON.stringify(Item.all);
-    localStorage.setItem("product", productData);
-}
 
-function getProduct() {
-    var productData = localStorage.getItem("product");
-    if(productData) {
-        Item.all = JSON.parse(productData);
-    }
-}
-
-getProduct();
 
 
 //random images function
 function randImages(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
-
