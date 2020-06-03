@@ -5,10 +5,9 @@ var product = ["bag.jpg", "banana.jpg", "bathroom.jpg", "boots.jpg", "breakfast.
 var totalClick = 0;
 var lableChartClicks = [];
 var lableChartViews = [];
-// variables for unique images
 var UniqueImages = [];
-/* var middleUniqueImages = [];
-var rigthUniqueImages = []; */
+Item.all = [];
+
 
 var leftImage = document.querySelector('#leftImage');
 var middleImage = document.querySelector('#centerImage');
@@ -26,12 +25,14 @@ function Item(name) {
     Item.all.push(this);
 
 }
-Item.all = [];
+
 
 for (var i = 0; i < product.length; i++) {
     new Item(product[i])
 }
-//console.log(Item.all);
+
+
+
 
 
 var leftItem;
@@ -39,62 +40,48 @@ var middleItem;
 var rigthItem;
 
 // for view images
-function renderProducts() {
+function renderItem() {
     leftItem = Item.all[randImages(0, Item.all.length - 1)];
-        middleItem = Item.all[randImages(0, Item.all.length - 1)];
+    middleItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-   
-    
-    if (leftItem === middleItem || leftItem === rigthItem || rigthItem === middleItem ) {
-        renderProducts();
-        UniqueImages.push(leftItem, middleItem, rigthItem);
-         /* if(UniqueImages === leftItem || UniqueImages === middleItem || UniqueImages === rigthItem){
-            renderProducts();}
-         } */
-
-        
-     
-            
-            
-        
 
 
+    if (leftItem === middleItem || leftItem === rigthItem || rigthItem === middleItem) {
+        renderItem();
 
+    }
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
     leftImage.title = leftItem.itemName;
-    //leftItem.imageView++;
 
     middleImage.src = middleItem.imagePath;
     middleImage.alt = middleItem.itemName;
     middleImage.title = middleItem.itemName;
 
-    //middleItem.imageView++;
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-    //rigthItem.imageView++;
-    
 }
-renderProducts();
 
+renderItem();
+UniqueImages.push(leftItem, middleItem, rigthItem);
 
 
 // add event by mouse click
 imageSection.addEventListener('click', mouseClick);
-//var totalClick = 0;
+
+
+
 function mouseClick(event) {
-    //console.log(event);
-    if (totalClick < 10) {
+
+    if (totalClick < 25) {
         if (event.target.id !== 'imageSection') {
             totalClick++;
-            //renderProducts();
+            //renderItem();
 
-            console.log(totalClick);
 
             if (event.target.id === 'leftImage') {
                 leftItem.imageClick++;
-
 
             }
             if (event.target.id === 'centerImage') {
@@ -109,24 +96,17 @@ function mouseClick(event) {
             middleItem.imageView++;
             rigthItem.imageView++;
 
-
-
-            renderProducts();
+            //storeItem();
+            renderItem();
         }
     }
-    else if (totalClick == 10) {
+    else if (totalClick == 25) {
         totalClick++;
 
         renderResult();
         addChartJs();
-
-
-
     }
-
 }
-
-
 
 // To add results
 function renderResult() {
@@ -139,24 +119,14 @@ function renderResult() {
 
         li1.textContent = `${Item.all[i].itemName} has ${Item.all[i].imageClick} clicks and ${Item.all[i].imageView} views`;
         ul1.append(li1);
-
     }
 
-
 }
-
-
-
-
-
 
 //random images function
 function randImages(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-
-
 
 
 // chart.js code 
@@ -209,8 +179,18 @@ function addChartJs() {
 
 }
 
+//getItem();
 
+/* function storeItem() {
+    var data = JSON.stringify(Item.all);
+    localStorage.setItem('data', data);
+    console.log(Item.all);
+}
 
+function getItem() {
 
+    var data = localStorage.getItem('data');
+    Item.all = JSON.parse(data)
+    console.log(Item.all);
 
-
+} */
