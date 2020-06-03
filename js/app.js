@@ -6,7 +6,7 @@ var totalClick = 0;
 var lableChartClicks = [];
 var lableChartViews = [];
 // variables for unique images
-var UniqueImages = [];
+
 /* var middleUniqueImages = [];
 var rigthUniqueImages = []; */
 
@@ -35,46 +35,76 @@ for (var i = 0; i < product.length; i++) {
 
 
 var leftItem;
-var middleItem;
+var centerItem;
 var rigthItem;
+var UniqueImages = [];
+
 
 // for view images
 function renderProducts() {
     leftItem = Item.all[randImages(0, Item.all.length - 1)];
-        middleItem = Item.all[randImages(0, Item.all.length - 1)];
+    centerItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-   
-    
-    if (leftItem === middleItem || leftItem === rigthItem || rigthItem === middleItem ) {
+
+
+    if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
         renderProducts();
-        UniqueImages.push(leftItem, middleItem, rigthItem);
-         /* if(UniqueImages === leftItem || UniqueImages === middleItem || UniqueImages === rigthItem){
-            renderProducts();}
-         } */
+      
+    }
+
+        // subsequence images code
+        if (UniqueImages.includes(leftItem)) {
+            leftItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (leftItem === centerItem || leftItem === rigthItem) {
+                leftItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
         }
         
-     
-            
-            
+        
+        if (UniqueImages.includes(centerItem)) {
+            centerItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (centerItem === leftItem || centerItem === rigthItem) {
+                centerItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
+        }
+        
         
 
+        if (UniqueImages.includes(rigthItem)) {
+            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (rigthItem === leftItem || rigthItem === centerItem) {
+                rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
+        }
+       
+       
+     UniqueImages.push(leftItem);
+    UniqueImages.push(centerItem);
+    UniqueImages.push(rigthItem); 
+    
 
+   
+     while (UniqueImages.length > 3) {
+        UniqueImages.shift(); 
+    }
+    
+    console.log(UniqueImages); 
 
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
     leftImage.title = leftItem.itemName;
-    //leftItem.imageView++;
 
-    middleImage.src = middleItem.imagePath;
-    middleImage.alt = middleItem.itemName;
-    middleImage.title = middleItem.itemName;
 
-    //middleItem.imageView++;
+    middleImage.src = centerItem.imagePath;
+    middleImage.alt = centerItem.itemName;
+    middleImage.title = centerItem.itemName;
+
+
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-    //rigthItem.imageView++;
-    
+
+
 }
 renderProducts();
 
@@ -82,13 +112,13 @@ renderProducts();
 
 // add event by mouse click
 imageSection.addEventListener('click', mouseClick);
-//var totalClick = 0;
+
 function mouseClick(event) {
-    //console.log(event);
+
     if (totalClick < 10) {
         if (event.target.id !== 'imageSection') {
             totalClick++;
-            //renderProducts();
+
 
             console.log(totalClick);
 
@@ -98,7 +128,7 @@ function mouseClick(event) {
 
             }
             if (event.target.id === 'centerImage') {
-                middleItem.imageClick++;
+                centerItem.imageClick++;
 
             }
             if (event.target.id === 'rigthImage') {
@@ -106,8 +136,8 @@ function mouseClick(event) {
 
             }
             leftItem.imageView++;
-            middleItem.imageView++;
-            rigthItem.imageView++;
+            centerItem.imageView++;
+            rigthItem.imageView++; 
 
 
 
@@ -116,10 +146,10 @@ function mouseClick(event) {
     }
     else if (totalClick == 10) {
         totalClick++;
-
+        
         renderResult();
         addChartJs();
-
+        
 
 
     }
@@ -130,6 +160,7 @@ function mouseClick(event) {
 
 // To add results
 function renderResult() {
+    setProduct();
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
@@ -150,10 +181,6 @@ function renderResult() {
 
 
 
-//random images function
-function randImages(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 
 
@@ -162,6 +189,7 @@ function randImages(min, max) {
 // chart.js code 
 function addChartJs() {
     var ctx = document.getElementById('myChart').getContext('2d');
+    
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -205,12 +233,27 @@ function addChartJs() {
     });
 
 
-
-
 }
 
+function setProduct() {
+    var productData = JSON.stringify(Item.all);
+    localStorage.setItem("product", productData);
+}
+
+function getProduct() {
+    var productData = localStorage.getItem("product");
+    if(productData) {
+        Item.all = JSON.parse(productData);
+    }
+}
+
+getProduct();
 
 
+//random images function
+function randImages(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 
 
