@@ -5,9 +5,10 @@ var product = ["bag.jpg", "banana.jpg", "bathroom.jpg", "boots.jpg", "breakfast.
 var totalClick = 0;
 var lableChartClicks = [];
 var lableChartViews = [];
-var UniqueImages = [];
-Item.all = [];
+// variables for unique images
 
+/* var middleUniqueImages = [];
+var rigthUniqueImages = []; */
 
 var leftImage = document.querySelector('#leftImage');
 var middleImage = document.querySelector('#centerImage');
@@ -25,67 +26,109 @@ function Item(name) {
     Item.all.push(this);
 
 }
-
+Item.all = [];
 
 for (var i = 0; i < product.length; i++) {
     new Item(product[i])
 }
-
-
-
+//console.log(Item.all);
 
 
 var leftItem;
-var middleItem;
+var centerItem;
 var rigthItem;
+var UniqueImages = [];
+
 
 // for view images
-function renderItem() {
+function renderProducts() {
     leftItem = Item.all[randImages(0, Item.all.length - 1)];
-    middleItem = Item.all[randImages(0, Item.all.length - 1)];
+    centerItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
 
-    if (leftItem === middleItem || leftItem === rigthItem || rigthItem === middleItem) {
-        renderItem();
-
+    if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
+        renderProducts();
+      
     }
+
+        // subsequence images code
+        if (UniqueImages.includes(leftItem)) {
+            leftItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (leftItem === centerItem || leftItem === rigthItem) {
+                leftItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
+        }
+        
+        
+        if (UniqueImages.includes(centerItem)) {
+            centerItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (centerItem === leftItem || centerItem === rigthItem) {
+                centerItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
+        }
+        
+        
+
+        if (UniqueImages.includes(rigthItem)) {
+            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+            while (rigthItem === leftItem || rigthItem === centerItem) {
+                rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+            }
+        }
+       
+       
+     UniqueImages.push(leftItem);
+    UniqueImages.push(centerItem);
+    UniqueImages.push(rigthItem); 
+    
+
+   
+     while (UniqueImages.length > 3) {
+        UniqueImages.shift(); 
+    }
+    
+    console.log(UniqueImages); 
+
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
     leftImage.title = leftItem.itemName;
 
-    middleImage.src = middleItem.imagePath;
-    middleImage.alt = middleItem.itemName;
-    middleImage.title = middleItem.itemName;
+
+    middleImage.src = centerItem.imagePath;
+    middleImage.alt = centerItem.itemName;
+    middleImage.title = centerItem.itemName;
+
 
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-}
 
-renderItem();
-UniqueImages.push(leftItem, middleItem, rigthItem);
+
+}
+renderProducts();
+
 
 
 // add event by mouse click
 imageSection.addEventListener('click', mouseClick);
 
-
-
 function mouseClick(event) {
 
-    if (totalClick < 25) {
+    if (totalClick < 10) {
         if (event.target.id !== 'imageSection') {
             totalClick++;
-            //renderItem();
 
+
+            console.log(totalClick);
 
             if (event.target.id === 'leftImage') {
                 leftItem.imageClick++;
 
+
             }
             if (event.target.id === 'centerImage') {
-                middleItem.imageClick++;
+                centerItem.imageClick++;
 
             }
             if (event.target.id === 'rigthImage') {
@@ -93,23 +136,31 @@ function mouseClick(event) {
 
             }
             leftItem.imageView++;
-            middleItem.imageView++;
-            rigthItem.imageView++;
+            centerItem.imageView++;
+            rigthItem.imageView++; 
 
-            //storeItem();
-            renderItem();
+
+
+            renderProducts();
         }
     }
-    else if (totalClick == 25) {
+    else if (totalClick == 10) {
         totalClick++;
-
+        
         renderResult();
         addChartJs();
+        
+
+
     }
+
 }
+
+
 
 // To add results
 function renderResult() {
+    setProduct();
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
@@ -119,19 +170,26 @@ function renderResult() {
 
         li1.textContent = `${Item.all[i].itemName} has ${Item.all[i].imageClick} clicks and ${Item.all[i].imageView} views`;
         ul1.append(li1);
+
     }
 
+
 }
 
-//random images function
-function randImages(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+
+
+
+
+
+
+
+
 
 
 // chart.js code 
 function addChartJs() {
     var ctx = document.getElementById('myChart').getContext('2d');
+    
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -174,23 +232,22 @@ function addChartJs() {
         }
     });
 
-
-
-
 }
 
-//getItem();
-
-/* function storeItem() {
-    var data = JSON.stringify(Item.all);
-    localStorage.setItem('data', data);
-    console.log(Item.all);
+function setProduct(){
+    var productData =JSON.stringify(Item.all);
+    localStorage.setItem("data", productData);
 }
 
-function getItem() {
+function getProduct() {
+    var productData = localStorage.getItem("data");
+    if(productData) {
+        Item.all = JSON.parse(productData);
+    }
+}
+getProduct();
 
-    var data = localStorage.getItem('data');
-    Item.all = JSON.parse(data)
-    console.log(Item.all);
-
-} */
+//random images function
+function randImages(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
