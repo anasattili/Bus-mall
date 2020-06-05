@@ -47,48 +47,46 @@ function renderProducts() {
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
 
-    if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
-        renderProducts();
-      
-    }
 
-        // subsequence images code
-        if (UniqueImages.includes(leftItem)) {
+
+    // subsequence images code
+    if (UniqueImages.includes(leftItem)) {
+        leftItem = Item.all[randImages(0, Item.all.length - 1)];
+        while (leftItem === centerItem || leftItem === rigthItem) {
             leftItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (leftItem === centerItem || leftItem === rigthItem) {
-                leftItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
         }
-        
-        
-        if (UniqueImages.includes(centerItem)) {
-            centerItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (centerItem === leftItem || centerItem === rigthItem) {
-                centerItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
-        }
-        
-        
-
-        if (UniqueImages.includes(rigthItem)) {
-            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (rigthItem === leftItem || rigthItem === centerItem) {
-                rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
-        }
-       
-       
-     UniqueImages.push(leftItem);
-    UniqueImages.push(centerItem);
-    UniqueImages.push(rigthItem); 
-    
-
-   
-     while (UniqueImages.length > 3) {
-        UniqueImages.shift(); 
     }
+
+
+    if (UniqueImages.includes(centerItem)) {
+        centerItem = Item.all[randImages(0, Item.all.length - 1)];
+        while (centerItem === leftItem || centerItem === rigthItem) {
+            centerItem = Item.all[randImages(0, Item.all.length - 1)];
+        }
+    }
+
+
+
+    if (UniqueImages.includes(rigthItem)) {
+        rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+        while (rigthItem === leftItem || rigthItem === centerItem) {
+            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+        }
+    }
+
+
+    UniqueImages.push(leftItem);
+    UniqueImages.push(centerItem);
+    UniqueImages.push(rigthItem);
+
+
+
+    while (UniqueImages.length > 3) {
+        UniqueImages.shift();
+    }
+
+    console.log(UniqueImages);
     
-    console.log(UniqueImages); 
 
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
@@ -108,6 +106,10 @@ function renderProducts() {
 }
 renderProducts();
 
+if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
+    renderProducts();
+
+}
 
 
 // add event by mouse click
@@ -137,7 +139,7 @@ function mouseClick(event) {
             }
             leftItem.imageView++;
             centerItem.imageView++;
-            rigthItem.imageView++; 
+            rigthItem.imageView++;
 
 
 
@@ -146,10 +148,10 @@ function mouseClick(event) {
     }
     else if (totalClick == 10) {
         totalClick++;
-        
+
         renderResult();
         addChartJs();
-        
+
 
 
     }
@@ -160,7 +162,7 @@ function mouseClick(event) {
 
 // To add results
 function renderResult() {
-    
+
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
@@ -189,7 +191,7 @@ function renderResult() {
 // chart.js code 
 function addChartJs() {
     var ctx = document.getElementById('myChart').getContext('2d');
-    
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
