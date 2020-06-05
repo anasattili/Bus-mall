@@ -47,10 +47,10 @@ function renderProducts() {
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
 
-    if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
+    /* if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
         renderProducts();
       
-    }
+    } */
 
         // subsequence images code
         if (UniqueImages.includes(leftItem)) {
@@ -90,6 +90,8 @@ function renderProducts() {
     
     console.log(UniqueImages); 
 
+    
+
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
     leftImage.title = leftItem.itemName;
@@ -103,11 +105,14 @@ function renderProducts() {
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-
+    
 
 }
 renderProducts();
-
+if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
+    renderProducts();
+  
+}
 
 
 // add event by mouse click
@@ -142,6 +147,7 @@ function mouseClick(event) {
 
 
             renderProducts();
+            
         }
     }
     else if (totalClick == 10) {
@@ -160,8 +166,8 @@ function mouseClick(event) {
 
 // To add results
 function renderResult() {
-    setProduct();
-    var ul1 = document.getElementById('listResults');
+    setProduct(); 
+        var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
         // for count the number of clicks and views
@@ -234,15 +240,16 @@ function addChartJs() {
 
 }
 
-function setProduct(){
+ function setProduct(){
     var productData =JSON.stringify(Item.all);
     localStorage.setItem("data", productData);
-}
+} 
 
 function getProduct() {
     var productData = localStorage.getItem("data");
     if(productData) {
         Item.all = JSON.parse(productData);
+        
     }
 }
 getProduct();
