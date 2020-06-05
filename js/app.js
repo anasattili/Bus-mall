@@ -5,10 +5,7 @@ var product = ["bag.jpg", "banana.jpg", "bathroom.jpg", "boots.jpg", "breakfast.
 var totalClick = 0;
 var lableChartClicks = [];
 var lableChartViews = [];
-// variables for unique images
 
-/* var middleUniqueImages = [];
-var rigthUniqueImages = []; */
 
 var leftImage = document.querySelector('#leftImage');
 var middleImage = document.querySelector('#centerImage');
@@ -46,50 +43,25 @@ function renderProducts() {
     centerItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
-
-    /* if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
-        renderProducts();
-      
-    } */
-
-        // subsequence images code
-        if (UniqueImages.includes(leftItem)) {
-            leftItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (leftItem === centerItem || leftItem === rigthItem) {
-                leftItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
-        }
-        
-        
-        if (UniqueImages.includes(centerItem)) {
-            centerItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (centerItem === leftItem || centerItem === rigthItem) {
-                centerItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
-        }
-        
-        
-
-        if (UniqueImages.includes(rigthItem)) {
-            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-            while (rigthItem === leftItem || rigthItem === centerItem) {
-                rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-            }
-        }
-       
-       
-     UniqueImages.push(leftItem);
-    UniqueImages.push(centerItem);
-    UniqueImages.push(rigthItem); 
+    
     
 
-   
-     while (UniqueImages.length > 3) {
-        UniqueImages.shift(); 
-    }
-    
-    console.log(UniqueImages); 
+    do {
+        leftItem = Item.all[randImages(0, Item.all.length - 1)];
+    centerItem = Item.all[randImages(0, Item.all.length - 1)];
+    rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
+      } while (leftItem === centerItem || leftItem === rigthItem || centerItem === rigthItem || UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem));
+    
+    
+       /* if (UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem)) {
+        console.log(true);
+      } else {
+        console.log(false);
+      }  */
+      UniqueImages[0] = leftItem;
+      UniqueImages[1] = centerItem;
+      UniqueImages[2] = rigthItem;
     
 
     leftImage.src = leftItem.imagePath;
@@ -106,13 +78,12 @@ function renderProducts() {
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
     
-
-}
+       
+    }
+    
 renderProducts();
-if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
-    renderProducts();
-  
-}
+
+
 
 
 // add event by mouse click
@@ -120,7 +91,7 @@ imageSection.addEventListener('click', mouseClick);
 
 function mouseClick(event) {
 
-    if (totalClick < 10) {
+    if (totalClick < 25) {
         if (event.target.id !== 'imageSection') {
             totalClick++;
 
@@ -142,20 +113,19 @@ function mouseClick(event) {
             }
             leftItem.imageView++;
             centerItem.imageView++;
-            rigthItem.imageView++; 
+            rigthItem.imageView++;
 
 
 
             renderProducts();
-            
         }
     }
-    else if (totalClick == 10) {
+    else if (totalClick == 25) {
         totalClick++;
-        
+        setProduct()
         renderResult();
         addChartJs();
-        
+
 
 
     }
@@ -166,8 +136,8 @@ function mouseClick(event) {
 
 // To add results
 function renderResult() {
-    setProduct(); 
-        var ul1 = document.getElementById('listResults');
+
+    var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
         // for count the number of clicks and views
@@ -195,7 +165,7 @@ function renderResult() {
 // chart.js code 
 function addChartJs() {
     var ctx = document.getElementById('myChart').getContext('2d');
-    
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -238,23 +208,40 @@ function addChartJs() {
         }
     });
 
+
 }
 
- function setProduct(){
+// function for store data
+function setProduct(){
     var productData =JSON.stringify(Item.all);
     localStorage.setItem("data", productData);
 } 
-
+ // function for retrieve data
 function getProduct() {
     var productData = localStorage.getItem("data");
     if(productData) {
         Item.all = JSON.parse(productData);
-        
+        renderResult();
+        addChartJs();
     }
 }
-getProduct();
+
 
 //random images function
 function randImages(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+getProduct()
+
+
+
+
+
+
+
+
+
+
+
+
