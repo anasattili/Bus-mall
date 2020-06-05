@@ -5,10 +5,7 @@ var product = ["bag.jpg", "banana.jpg", "bathroom.jpg", "boots.jpg", "breakfast.
 var totalClick = 0;
 var lableChartClicks = [];
 var lableChartViews = [];
-// variables for unique images
 
-/* var middleUniqueImages = [];
-var rigthUniqueImages = []; */
 
 var leftImage = document.querySelector('#leftImage');
 var middleImage = document.querySelector('#centerImage');
@@ -46,46 +43,25 @@ function renderProducts() {
     centerItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
+    
+    
 
-
-
-    // subsequence images code
-    if (UniqueImages.includes(leftItem)) {
+    do {
         leftItem = Item.all[randImages(0, Item.all.length - 1)];
-        while (leftItem === centerItem || leftItem === rigthItem) {
-            leftItem = Item.all[randImages(0, Item.all.length - 1)];
-        }
-    }
+    centerItem = Item.all[randImages(0, Item.all.length - 1)];
+    rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
-
-    if (UniqueImages.includes(centerItem)) {
-        centerItem = Item.all[randImages(0, Item.all.length - 1)];
-        while (centerItem === leftItem || centerItem === rigthItem) {
-            centerItem = Item.all[randImages(0, Item.all.length - 1)];
-        }
-    }
-
-
-
-    if (UniqueImages.includes(rigthItem)) {
-        rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-        while (rigthItem === leftItem || rigthItem === centerItem) {
-            rigthItem = Item.all[randImages(0, Item.all.length - 1)];
-        }
-    }
-
-
-    UniqueImages.push(leftItem);
-    UniqueImages.push(centerItem);
-    UniqueImages.push(rigthItem);
-
-
-
-    while (UniqueImages.length > 3) {
-        UniqueImages.shift();
-    }
-
-    console.log(UniqueImages);
+      } while (leftItem === centerItem || leftItem === rigthItem || centerItem === rigthItem || UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem));
+    
+    
+       /* if (UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem)) {
+        console.log(true);
+      } else {
+        console.log(false);
+      }  */
+      UniqueImages[0] = leftItem;
+      UniqueImages[1] = centerItem;
+      UniqueImages[2] = rigthItem;
     
 
     leftImage.src = leftItem.imagePath;
@@ -101,15 +77,13 @@ function renderProducts() {
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-
-
-}
+    
+       
+    }
+    
 renderProducts();
 
-if (leftItem === centerItem || leftItem === rigthItem || rigthItem === centerItem) {
-    renderProducts();
 
-}
 
 
 // add event by mouse click
@@ -117,7 +91,7 @@ imageSection.addEventListener('click', mouseClick);
 
 function mouseClick(event) {
 
-    if (totalClick < 10) {
+    if (totalClick < 25) {
         if (event.target.id !== 'imageSection') {
             totalClick++;
 
@@ -146,7 +120,7 @@ function mouseClick(event) {
             renderProducts();
         }
     }
-    else if (totalClick == 10) {
+    else if (totalClick == 25) {
         totalClick++;
 
         renderResult();
