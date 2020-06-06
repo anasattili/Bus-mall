@@ -3,6 +3,8 @@
 var product = ["bag.jpg", "banana.jpg", "bathroom.jpg", "boots.jpg", "breakfast.jpg", "bubblegum.jpg", "chair.jpg", "cthulhu.jpg", "dog-duck.jpg", "dragon.jpg", "pen.jpg", "pet-sweep.jpg", "scissors.jpg", "shark.jpg", "sweep.png", "tauntaun.jpg", "unicorn.jpg", "usb.gif", "water-can.jpg", "wine-glass.jpg"];
 
 var totalClick = 0;
+
+//To calculate numbers of clicks and views
 var lableChartClicks = [];
 var lableChartViews = [];
 
@@ -13,29 +15,30 @@ var rigthImage = document.querySelector('#rigthImage');
 var sectionImage = document.querySelector('#imageSection');
 
 
-//var itemArray = [];
+
 function Item(name) {
     this.itemName = name.split(".")[0];
     this.imagePath = `assets/${name}`;
     this.imageClick = 0;
     this.imageView = 0;
-    //itemArray.push(this);
+
     Item.all.push(this);
 
 }
-Item.all = [];
 
+Item.all = [];
 for (var i = 0; i < product.length; i++) {
     new Item(product[i])
 }
-//console.log(Item.all);
+
 
 
 var leftItem;
 var centerItem;
 var rigthItem;
-var UniqueImages = [];
 
+// Array for store images and prevent subsequent images
+var UniqueImages = [];
 
 // for view images
 function renderProducts() {
@@ -43,26 +46,19 @@ function renderProducts() {
     centerItem = Item.all[randImages(0, Item.all.length - 1)];
     rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
-    
-    
-
+    // For prevent the similarity images for the same click and  prevent subsequent images
     do {
         leftItem = Item.all[randImages(0, Item.all.length - 1)];
-    centerItem = Item.all[randImages(0, Item.all.length - 1)];
-    rigthItem = Item.all[randImages(0, Item.all.length - 1)];
+        centerItem = Item.all[randImages(0, Item.all.length - 1)];
+        rigthItem = Item.all[randImages(0, Item.all.length - 1)];
 
-      } while (leftItem === centerItem || leftItem === rigthItem || centerItem === rigthItem || UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem));
-    
-    
-       /* if (UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem)) {
-        console.log(true);
-      } else {
-        console.log(false);
-      }  */
-      UniqueImages[0] = leftItem;
-      UniqueImages[1] = centerItem;
-      UniqueImages[2] = rigthItem;
-    
+    } while (leftItem === centerItem || leftItem === rigthItem || centerItem === rigthItem || UniqueImages.includes(leftItem) || UniqueImages.includes(centerItem) || UniqueImages.includes(rigthItem));
+
+
+    UniqueImages[0] = leftItem;
+    UniqueImages[1] = centerItem;
+    UniqueImages[2] = rigthItem;
+
 
     leftImage.src = leftItem.imagePath;
     leftImage.alt = leftItem.itemName;
@@ -77,10 +73,10 @@ function renderProducts() {
     rigthImage.src = rigthItem.imagePath;
     rigthImage.alt = rigthItem.itemName;
     rigthImage.title = rigthItem.itemName;
-    
-       
-    }
-    
+
+
+}
+
 renderProducts();
 
 
@@ -96,21 +92,19 @@ function mouseClick(event) {
             totalClick++;
 
 
-            console.log(totalClick);
-
             if (event.target.id === 'leftImage') {
                 leftItem.imageClick++;
 
-
             }
+
             if (event.target.id === 'centerImage') {
                 centerItem.imageClick++;
-
             }
+
             if (event.target.id === 'rigthImage') {
                 rigthItem.imageClick++;
-
             }
+
             leftItem.imageView++;
             centerItem.imageView++;
             rigthItem.imageView++;
@@ -126,20 +120,19 @@ function mouseClick(event) {
         renderResult();
         addChartJs();
 
-
-
     }
 
 }
 
 
 
-// To add results
+// To add results as un-order list
 function renderResult() {
 
     var ul1 = document.getElementById('listResults');
     for (var i = 0; i < Item.all.length; i++) {
         var li1 = document.createElement('li');
+
         // for count the number of clicks and views
         lableChartClicks.push(Item.all[i].imageClick);
         lableChartViews.push(Item.all[i].imageView);
@@ -151,14 +144,6 @@ function renderResult() {
 
 
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -212,14 +197,15 @@ function addChartJs() {
 }
 
 // function for store data
-function setProduct(){
-    var productData =JSON.stringify(Item.all);
+function setProduct() {
+    var productData = JSON.stringify(Item.all);
     localStorage.setItem("data", productData);
-} 
- // function for retrieve data
+}
+
+// function for retrieve data
 function getProduct() {
     var productData = localStorage.getItem("data");
-    if(productData) {
+    if (productData) {
         Item.all = JSON.parse(productData);
         renderResult();
         addChartJs();
